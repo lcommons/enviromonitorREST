@@ -41,8 +41,8 @@ exports.add_observation = function(req, res) {
 	    console.log("Connection ERROR!");
 	    throw err;
 	} else {
-	    console.log("POST Connected!");
-	    console.log("req: " + JSON.stringify(req));
+	    console.log("POST- Connected!");
+	    console.log("req-: " + req.body.Key));
 	    //console.log(req.body);
 	    //console.log( req.body.add_date , req.body.obs_type, req.body.sensor , req.body.location, req.body.value);
 	    
