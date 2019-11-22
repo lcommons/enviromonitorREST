@@ -41,7 +41,7 @@ exports.add_observation = function(req, res) {
 	    console.log("Connection ERROR!");
 	    throw err;
 	} else {
-	    console.log("Connected!");
+	    console.log("POST Connected!");
 	    console.log("req: " + req.toString());
 	    //console.log(req.body);
 	    //console.log( req.body.add_date , req.body.obs_type, req.body.sensor , req.body.location, req.body.value);
@@ -59,6 +59,6 @@ exports.add_observation = function(req, res) {
 		    connection.end();
 		}//end query if(err)
 	    });
-	}//  end connect if(err)
+	}//  end connect if(err) else
     });
 };
