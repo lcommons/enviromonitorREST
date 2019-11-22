@@ -9,7 +9,18 @@ const connection = {
 
 exports.index = function(req, res) {
  //res.render('observation', {title: 'Weather/Air Observations'});
-    res.send("observations");
+    var sql = 'select * from observations;'
+    connection.connect(function(err) {
+	if (err) throw err;
+	console.log("Connected!");
+	connection.query(sql, function (err, result, fields) {
+	    if (err) throw err;
+	    console.log("Result: " + JSON.stringify(result));
+	    res.send(JSON.stringify(result));
+	    connection.end();
+	});
+    });
+//    res.send("observations");
 };
 
 exports.add_observation = function(req, res) {
