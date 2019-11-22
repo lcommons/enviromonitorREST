@@ -58,8 +58,7 @@ exports.add_observation = function(req, res) {
 		    // successfully inserted into db
 		    connection.end();
 		}//end query if(err)
-	    }//  end connect if(err)
-	});
+	    });
+	}//  end connect if(err)
     });
-
 };
