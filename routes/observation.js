@@ -1,10 +1,17 @@
 var mysql = require('mysql');
-const connection = {
-	host: "localhost",
-	user: 'datauser',
-	password: 'localdatauser',
-	database : 'environment_data'
-};
+//const connection = {
+//	host: "localhost",
+//	user: 'datauser',
+//	password: 'localdatauser',
+//	database : 'environment_data'
+//};
+var connection = mysql.createConnection({
+  host     : process.env.RDS_HOSTNAME,
+  user     : process.env.RDS_USERNAME,
+  password : process.env.RDS_PASSWORD,
+  port     : process.env.RDS_PORT
+});
+
 
 
 exports.index = function(req, res) {
