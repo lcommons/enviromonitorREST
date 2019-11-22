@@ -32,4 +32,24 @@ exports.index = function(req, res) {
 };
 
 exports.add_observation = function(req, res) {
+    var sql = "INSERT INTO observations (add_date, obs_type, sensor, location, value) VALUES (?,?,?,?,?)";
+    connection.connect(function(err) {
+	if (err) throw err;
+	console.log("Connected!");
+	console.log( req.body.add_date , req.body.obs_type, req.body.sensor , req.body.location, req.body.value);
+	
+	con.query(sql, [ req.body.add_date , req.body.obs_type, req.body.sensor , req.body.location, req.body.value], function (err, data) {
+	    if (err) {
+		console.log(err);
+		res.status(500).send(err);
+		con.end();
+	    } else {
+		console.log('success');
+		res.sendStatus(201);
+		// successfully inserted into db
+		con.end();
+	    } 
+	});
+    });
+
 };
