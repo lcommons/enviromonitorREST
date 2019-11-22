@@ -42,7 +42,7 @@ exports.add_observation = function(req, res) {
 	    throw err;
 	} else {
 	    console.log("Connected!");
-	    console.log("req: " + req);
+	    console.log("req: " + req.toString());
 	    //console.log(req.body);
 	    //console.log( req.body.add_date , req.body.obs_type, req.body.sensor , req.body.location, req.body.value);
 	    
