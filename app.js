@@ -12,14 +12,14 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 app.use(bodyParser.json()); // support json encoded bodies
-app.use(bodyParser.urlencoded({ extended: false })); // support encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 //app.use(express.static(path.join(__dirname, 'public')));
 
