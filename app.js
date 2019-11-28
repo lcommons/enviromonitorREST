@@ -1,3 +1,4 @@
+require('dotenv').config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.get('/',(req, res) => res.send('<h1>operations</h1><p><ul><li>GET /observations</li><li>POST /add_observation</li></ul></p>'))
 app.get('/observations', observation.index);
 app.post('/add_observation', observation.add_observation);
 

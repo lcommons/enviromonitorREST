@@ -50,7 +50,7 @@ data_types
 |----+----------+----------------------------------------------------------------------|
 |  1 | tempf    | Temperature (fahrenheit)                                             |
 |  2 | tempc    | Temperature (celsius)                                                |
-|  3 | humidty  | Humidity                                                             |
+|  3 | humidity | Humidity                                                             |
 |  4 | pressure | Atmospheric Pressure                                                 |
 |  5 | pm2.5    | Particulate matter (smaller than 2.5 microns) concentration in mg/m3 |
 |  6 | pm10     | Particulate matter (smaller than 10 microns) concentration in mg/m3  |
@@ -298,6 +298,13 @@ This JSON worked:
 }
 
 Note the date format, in a string. The minute rounded to 6.000.
+
+<2019-11-25 Mon 11:58>
+it worked!
+
+
+
+
 * The schematic view
 
 |---------------------------------+------------------------+--------------|
@@ -309,3 +316,99 @@ Note the date format, in a string. The minute rounded to 6.000.
 |                                 | - Receive new obs POST |              |
 |                                 | - - write to DB        |              |
 
+
+* Fabricate temp sensor for Raspberry PI
+From the Amazon page for the order
+The probe adopts DS18B20 sensor chip,is made of stainless steel which is waterproof, moisture-proof and anti-rust. 
+Collected temperature signal can be directly converted into a digital signal for processing by the device
+Output leads connection: 
+ - red (VCC), 
+ - yellow (DATA), 
+ - black (GND); 
+ - Black-GND. 
+Wide testing temperature range of -55 °c ~ +125 °c
+
+** Using Sensehat AND GPIO pins
+https://www.recantha.co.uk/blog/?p=14849
+
+enable 1-wire on PI:
+https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/ds18b20
+
+enable 1-Wire
+reboot
+
+$ lsmod | grep -i w1_
+
+<2019-11-25 Mon 19:43>
+currently have ppm sensor and temp sensor working.
+need mods to make sensehat and temp sensor play together
+
+since aircheck.py now relys on airtemp.py, will update cron tab to look into the project, not run the ~/ level script.
+$ crontab -e
+
+*/5 * * * *  python3 ~/enviromonitor/checkair/checkair.py
+** DONE use hi pin header to put sensehat back on
+<2019-11-27 Wed 17:07>
+added high header to SenseHat
+connected that to Pi 
+added temp sensor to that
+*** DONE update script to use both temps
+*** DONE create new sensor??
+*** DONE Add new sensor to database sensors table
+USE environment_data;
+INSERT INTO sensors(label) VALUES ("temp sensor DS18B20-1");
+
+* TODO add authentication to REST service!
+** TODO HTTPS!!
+*** DONE Add REST service as app.commons-faith.es
+*** TODO add https endpoint
+https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-elb.html
+add certificate to load balancer
+Classic Load Balancer listener
+|-------------------+-----------------+---------------------------------------------------------------|
+| Listener protocol | HTTPS           | The load balancer transport protocol to use for routing.      |
+| Instance port     | 80              | The port on which the instance server is listening.           |
+| Instance protocol | HTTP            | The protocol to use for routing traffic to backend instances. |
+| SSL certificate   | commons-fath.es |                                                               |
+|-------------------+-----------------+---------------------------------------------------------------|
+ 
+The SSL certificate assigned to the listener.
+*** DONE setload balancer to forward http to https
+***** DONE Create new load balancer
+migrated classic load balancer to application load balancer, then:
+https://forums.aws.amazon.com/thread.jspa?messageID=870019
+Hi guys,
+
+With the new Application Load Balancers you can do this fairly trivially now...
+
+Ensure you setup one of these at the time you setup an EB environment (still defaults to classic load balancer I believe).
+Once this is done, go to your EC2 settings -> Load Balancers. Click on the load balancer you created for your EB environment. You must ensure that you have setup a HTTPS listener prior to this task so make sure you listen on HTTPS 443 with an SSL cert and forward traffic to your instances with HTTP on 80. Then add a new listener which listens on HTTP and add a default action of "Redirect to:". Make sure you set HTTPS as the protocol, 443 as the port, "Original host, path, query" as the option and finally 301 as the HTTP response code.
+
+Once this listener is added ensure that you update your EC2 Load Balancer security group to accept both HTTPS and HTTP connections, then you're good to go!
+
+James
+
+** TODO Node authentication
+*** Simpler: 
+**** DONE just put a secret key in the header , and 
+**** DONE put also in env var on local server (w/ dotenv)
+**** DONE have the app test for that key, stored in an enviroment variable
+**** DONE set env var on AWS
+AWS Elastic Beanstalk manager | enviromonitor2 | Configuration | Modify Software
+https://us-east-2.console.aws.amazon.com/elasticbeanstalk/home?region=us-east-2#/environment/configuration?applicationName=enviromonitor2&environmentId=e-jwyfmhapff
+Enviroment Properties
+| DEVICE_KEY | aljkhds(92@34lkj-sdf897;128H:HUW<HEHk |
+|            |                                       |
+
+**** TODO deploy app; test!
+**** TODO Add select options
+**** TODO Add DELETE operation
+**** TODO Add root info page
+*** the theory
+create a "device" model comperable to "user" database
+ - id
+ - name
+ - description
+ - token?
+/devices
+/adddevice
