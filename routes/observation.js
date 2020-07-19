@@ -38,34 +38,33 @@ exports.indexTEMP = function (req, res) {
 
 exports.index = function (req, res) {
   console.log("laskjdfjhsdfkjh");
-  res.setHeader("Content-Type", "application/json");
-  res.send(
-    JSON.stringify({
-      data: [
-        ["2020-01-01", 18],
-        ["2020-01-02", 17],
-        ["2020-01-03", 22],
-        ["2020-01-04", 25],
-        ["2020-01-05", 30],
-        ["2020-01-06", 25],
-        ["2020-01-07", 20],
-        ["2020-01-08", 22],
-        ["2020-01-10", 23],
-        ["2020-01-11", 25],
-        ["2020-01-12", 20],
-        ["2020-01-13", 19],
-        ["2020-01-14", 23],
-        ["2020-01-15", 24],
-        ["2020-01-16", 22],
-        ["2020-01-17", 25],
-        ["2020-01-18", 22],
-        ["2020-01-19", 26],
-      ],
-    })
-  );
+  //res.setHeader("Content-Type", "application/json");
+  res.header("Access-Control-Allow-Origin", "*");
+  res.json({
+    data: [
+      { date: "2020-01-01", temp: 18 },
+      { date: "2020-01-02", temp: 17 },
+      { date: "2020-01-03", temp: 22 },
+      { date: "2020-01-04", temp: 25 },
+      { date: "2020-01-05", temp: 30 },
+      { date: "2020-01-06", temp: 25 },
+      { date: "2020-01-07", temp: 20 },
+      { date: "2020-01-08", temp: 22 },
+      { date: "2020-01-10", temp: 23 },
+      { date: "2020-01-11", temp: 25 },
+      { date: "2020-01-12", temp: 20 },
+      { date: "2020-01-13", temp: 19 },
+      { date: "2020-01-14", temp: 23 },
+      { date: "2020-01-15", temp: 24 },
+      { date: "2020-01-16", temp: 22 },
+      { date: "2020-01-17", temp: 25 },
+      { date: "2020-01-18", temp: 22 },
+      { date: "2020-01-19", temp: 26 },
+    ],
+  });
   return;
 };
-exports.get_observationsREAL = function (req, res) {
+exports.get_observations = function (req, res) {
   /* SAMPLE QUERY
       --- temperature for the past week
       select * from observations 
@@ -74,12 +73,15 @@ exports.get_observationsREAL = function (req, res) {
       and location=1
       and sensor=2;
     */
-
+  /*
   if (req.get("DEVICE_KEY") != client_key) {
     console.log(' if (req.get("DEVICE_KEY") != client_key)');
     res.sendStatus(401);
     return;
   }
+  */
+  res.header("Access-Control-Allow-Origin", "*");
+
   const rangeString = {
     day: "INTERVAL 1 DAY",
     week: "INTERVAL 7 DAY",
@@ -87,7 +89,7 @@ exports.get_observationsREAL = function (req, res) {
     year: "INTERVAL 1 YEAR",
   };
   let error = "";
-  let sql = "select * from observations where ";
+  /*let sql = "select * from observations where ";
 
   let range = req.query.range;
   if (!range) {
@@ -111,6 +113,32 @@ exports.get_observationsREAL = function (req, res) {
     error += "Location is required. ";
   }
   sql += "and obs_type=1 and sensor=2";
+*/
+  sql = `select add_date as 'date',value from observations  
+  where date(add_date) > DATE_SUB(current_date(), INTERVAL 7 DAY) 
+  and obs_type=1 
+  and location=1 
+  and sensor=1
+  order by add_date`;
+
+  const connection = mysql.createConnection(connectionMap);
+  connection.connect(function (err) {
+    if (err) {
+      //console.log("Connection ERROR!");
+      throw err;
+    } else {
+      //console.log("POST-- Connected!");
+      //console.log(req.body);
+      connection.query(sql, function (err, rows, fields) {
+        if (err) res.sendStatus(500);
+        console.log("The solution is: ", rows);
+        res.json(rows);
+      });
+
+      connection.end();
+    }
+  });
+  //res.sendStatus(200);
 };
 
 exports.add_observation = function (req, res) {
