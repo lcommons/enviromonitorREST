@@ -38,7 +38,7 @@ exports.indexTEMP = function (req, res) {
 
 exports.index = function (req, res) {
   console.log("laskjdfjhsdfkjh");
-  //res.setHeader("Content-Type", "application/json");
+  res.setHeader("Content-Type", "application/json");
   res.send(
     JSON.stringify({
       data: [
