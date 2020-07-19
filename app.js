@@ -1,14 +1,14 @@
 require('dotenv').config();
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var observation = require('./routes/observation');
-
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const createError   = require('http-errors');
+const express       = require('express');
+const path          = require('path');
+const cookieParser  = require('cookie-parser');
+const bodyParser    = require('body-parser');
+const url           = require('url');
+const querystring   = require('querystring');
+const observation   = require('./routes/observation');
+const indexRouter   = require('./routes/index');
+const usersRouter   = require('./routes/users');
 
 var app = express();
 

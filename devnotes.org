@@ -361,7 +361,7 @@ INSERT INTO sensors(label) VALUES ("temp sensor DS18B20-1");
 * TODO add authentication to REST service!
 ** TODO HTTPS!!
 *** DONE Add REST service as app.commons-faith.es
-*** TODO add https endpoint
+*** DONE add https endpoint
 https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-elb.html
 add certificate to load balancer
 Classic Load Balancer listener
@@ -372,6 +372,7 @@ Classic Load Balancer listener
 | SSL certificate   | commons-fath.es |                                                               |
 |-------------------+-----------------+---------------------------------------------------------------|
  
+*** TODO FORCE HTTPS; 
 The SSL certificate assigned to the listener.
 *** DONE setload balancer to forward http to https
 ***** DONE Create new load balancer
@@ -388,7 +389,7 @@ Once this listener is added ensure that you update your EC2 Load Balancer securi
 
 James
 
-** TODO Node authentication
+** DONE Node authentication
 *** Simpler: 
 **** DONE just put a secret key in the header , and 
 **** DONE put also in env var on local server (w/ dotenv)
@@ -400,10 +401,10 @@ Enviroment Properties
 | DEVICE_KEY | aljkhds(92@34lkj-sdf897;128H:HUW<HEHk |
 |            |                                       |
 
-**** TODO deploy app; test!
-**** TODO Add select options
-**** TODO Add DELETE operation
-**** TODO Add root info page
+**** DONE deploy app; test!
+** TODO Add select options
+** TODO Add DELETE operation
+** DONE Add root info page
 *** the theory
 create a "device" model comperable to "user" database
  - id
@@ -412,3 +413,15 @@ create a "device" model comperable to "user" database
  - token?
 /devices
 /adddevice
+
+
+* Data Display UI
+** IMPORTANT ASSUMPTION:
+   The UI is only served on a secure local network
+   so no authentication is needed.
+** served from local raspberry pi.
+  So, there are TWO web servers! 
+  1) the AWS REST service that fronts the database
+  2) another nodejs service that serves the UI.
+** Canned data summaries
+** Ad hoc / interactive 
