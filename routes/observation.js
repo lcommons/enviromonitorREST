@@ -143,21 +143,23 @@ exports.get_observations = function (req, res) {
 
 exports.add_observation = function (req, res) {
   console.log(req.headers);
-  if (
-    req.get("DEVICE_KEY") != client_key ||
-    req.get("DEVICE_KEY") != client_key ||
-    req.get("authorization") != client_key
-  ) {
+  if (req.get("authorization") != client_key) {
     console.log(' if (req.get("DEVICE_KEY") != client_key)');
     console.log(
-      " - DEVICE_KEY: " + req.get("DEVICE_KEY") + "client_key: " + client_key
+      " - authorization: " +
+        req.get("authorization") +
+        "client_key: " +
+        client_key
     );
     res.sendStatus(401);
     return;
   } else {
     console.log("here");
     console.log(
-      " - DEVICE_KEY: " + req.get("DEVICE_KEY") + "  client_key: " + client_key
+      " - authorization: " +
+        req.get("authorization") +
+        "  client_key: " +
+        client_key
     );
     var sql =
       "INSERT INTO observations (add_date, obs_type, sensor, location, value) VALUES (?,?,?,?,?)";
