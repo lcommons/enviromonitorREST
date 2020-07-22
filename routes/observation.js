@@ -145,7 +145,7 @@ exports.add_observation = function (req, res) {
   if (req.get("DEVICE_KEY") != client_key) {
     console.log(' if (req.get("DEVICE_KEY") != client_key)');
     console.log(
-      "DEVICE_KEY: " + req.get("DEVICE_KEY") + "client_key: " + client_key
+      " - DEVICE_KEY: " + req.get("DEVICE_KEY") + "client_key: " + client_key
     );
     res.sendStatus(401);
     return;
