@@ -6,7 +6,8 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const url = require("url");
 const querystring = require("querystring");
-const observation = require("./routes/observation");
+const addObservation = require("./routes/addObservation");
+const getObservation = require("./routes/getObservation");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 
@@ -21,9 +22,12 @@ app.get("/", (req, res) =>
     "<h1>operations</h1><p><ul><li>GET /observations</li><li>POST /add_observation</li></ul></p>"
   )
 );
-app.get("/observations", observation.index);
-app.get("/observations/x", observation.get_observations);
-app.post("/add_observation", observation.add_observation);
+app.get("/observations", getObservation.index);
+app.get(
+  "/observations/x/range/:range/location/:location/obs_type/:obs_type/sensor/:sensor",
+  getObservation.get_observations
+);
+app.post("/add_observation", addObservation.add_observation);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
