@@ -94,7 +94,7 @@ exports.get_observations = function (req, res) {
   // let end = req.params.end;
   let sql = "";
   try {
-    sql += "select * from observations where ";
+    sql += "select add_date, value from observations where ";
     sql += getDatePart(req);
     sql += getSensorIdValue(req);
     sql += getObservationTypeValue(req);
