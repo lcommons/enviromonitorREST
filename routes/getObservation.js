@@ -154,16 +154,23 @@ const rangeString = {
 const getDatePart = (req) => {
   if (req.params.range && rangeString[req.params.range]) {
     console.log("range: " + rangeString[req.params.range]);
-    return " date(add_date) > " + rangeString[req.params.range];
+    return (
+      " date(add_date) > " +
+      rangeString[req.params.range] +
+      (req.params.range === "hour" || req.params.range === "day"
+        ? ""
+        : " and minute(add_date) < 5")
+    );
   } else if (req.params.start) {
     if (req.params.end) {
-      return (
-        " date(add_date) >= date(" +
+      return " date(add_date) >= date(" +
         req.params.start +
         ") and date(add_date) <= date(" +
         req.params.start +
-        ")"
-      );
+        ")" +
+        (req.params.range === "hour" || req.params.range === "day")
+        ? ""
+        : " and minute(add_date) < 5";
     } else {
       return " date(add_date) >= date(" + req.params.start + ")";
     }
